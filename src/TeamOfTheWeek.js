@@ -29,11 +29,12 @@ const TeamOfTheWeek = ({ players = [], onPlayerClick }) => {
           backgroundImage: "url('/field.png')",
         }}
       >
-        <div className="pt-8 md:pt-16 lg:pt-24 pb-8 md:pb-12 lg:pb-16">
-          <h2 className="text-white text-center text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 lg:mb-8">
+        {/* Reduced top padding here */}
+        <div className="pt-4 md:pt-8 lg:pt-12 pb-4 md:pb-6 lg:pb-8">
+          <h2 className="text-white text-center text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3 lg:mb-4">
             Team of the Week
           </h2>
-          <h4 className="text-green-500 text-center text-lg md:text-xl lg:text-2xl font-bold mb-2">
+          <h4 className="text-green-500 text-center text-lg md:text-xl lg:text-2xl font-bold mb-1">
             Gameweek 23 PREMSCOUT Projected Points
           </h4>
           <p className="text-white text-center text-base md:text-lg lg:text-xl">
@@ -41,7 +42,8 @@ const TeamOfTheWeek = ({ players = [], onPlayerClick }) => {
           </p>
         </div>
 
-        <div className="flex flex-col items-center space-y-6 md:space-y-8 lg:space-y-12 px-2 md:px-4 lg:px-8">
+        {/* Adjusted spacing between rows */}
+        <div className="flex flex-col items-center space-y-4 md:space-y-6 lg:space-y-8 px-2 md:px-4 lg:px-8">
           {lineup.map((row, rowIndex) => (
             <div
               key={rowIndex}
