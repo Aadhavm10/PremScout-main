@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useMemo } from 'react';
 
-const PlayerCard = ({ player, onClose }) => {
+const PlayerCard = ({ player, onClose, allPlayers = [] }) => {
+  const calculateValueRating = useMemo(() => {
+    // Group players by position
+    const playersByPosition = allPlayers.reduce((acc, p) => {
+      if (!acc[p.position]) {
+        acc[p.position] = [];
+      }
+      acc[p.position].push(p);
+      return acc;
+    }, {});
+
+    // Find best player in the position based on total points
+    const bestInPosition = playersByPosition[player.position]?.reduce((best, curr) => 
+      (curr.total_points > best.total_points) ? curr : best
+    , playersByPosition[player.position][0]);
+
+    if (!bestInPosition) return 0;
+
+    // Calculate relative value (1-5 stars)
+    // Value = (player points / best player points) * 5
+    const relativeValue = Math.round((player.total_points / bestInPosition.total_points) * 5);
+    
+    // Ensure value is between 1 and 5
+    return Math.max(1, Math.min(5, relativeValue));
+  }, [player.position, player.total_points, allPlayers]);
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[80%] lg:max-w-[900px] relative flex flex-col md:flex-row">
@@ -39,7 +64,7 @@ const PlayerCard = ({ player, onClose }) => {
               { label: "Price", value: `$${(player.now_cost / 10 * 10).toFixed(1)}M` },
               { label: "Goals", value: player.goals_scored },
               { label: "Assists", value: player.assists },
-              { label: "Minutes", value: player.minutes },
+              { label: "Chance of Playing", value: `${player.chance_of_playing_this_round}%` },
               { label: "Form", value: player.form }
             ].map((stat, index) => (
               <div key={index} className="text-center p-2 bg-gray-50 rounded-lg">
@@ -53,8 +78,11 @@ const PlayerCard = ({ player, onClose }) => {
           <div className="mt-6 text-center relative group">
             <p className="text-gray-500 text-base md:text-lg mb-2">Position Value Rating</p>
             <div className="text-yellow-500 text-2xl md:text-3xl">
-              {"★".repeat(player.value)}
-              {"☆".repeat(5 - player.value)}
+              {"★".repeat(calculateValueRating)}
+              {"☆".repeat(5 - calculateValueRating)}
+            </div>
+            <div className="invisible group-hover:visible absolute w-full bg-gray-800 text-white text-sm p-2 rounded mt-2">
+              Rating based on performance relative to the best player in {player.position} position
             </div>
           </div>
         </div>

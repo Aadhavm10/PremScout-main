@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("gameweek_22_predictions.csv");
+        const response = await fetch("gameweek_23_predictions.csv");
         const csvText = await response.text();
         Papa.parse(csvText, {
           header: true,

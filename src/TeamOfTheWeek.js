@@ -3,8 +3,8 @@ import React from "react";
 const TeamOfTheWeek = ({ players = [], onPlayerClick }) => {
   const formation = [
     { position: "GKP", count: 1 },
-    { position: "DEF", count: 4 },
-    { position: "MID", count: 3 },
+    { position: "DEF", count: 3 },
+    { position: "MID", count: 4 },
     { position: "FWD", count: 3 },
   ];
 
@@ -34,7 +34,7 @@ const TeamOfTheWeek = ({ players = [], onPlayerClick }) => {
             Team of the Week
           </h2>
           <h4 className="text-green-500 text-center text-lg md:text-xl lg:text-2xl font-bold">
-            Gameweek 12 PREMSCOUT Projected Points
+            Gameweek 23 PREMSCOUT Projected Points
           </h4>
         </div>
 

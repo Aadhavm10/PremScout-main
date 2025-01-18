@@ -4,7 +4,7 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
   const [filter, setFilter] = useState("");
   const [positionFilter, setPositionFilter] = useState("");
   const [teamFilter, setTeamFilter] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [priceRange, setPriceRange] = useState([0, 20.0]); // Changed maximum to 20.0
   const [sortField, setSortField] = useState(null);
   const [decending, setDecending] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +15,7 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
     const matchesName = player.name && player.name.toLowerCase().includes(filter.toLowerCase());
     const matchesPosition = positionFilter ? player.position === positionFilter : true;
     const matchesTeam = teamFilter ? player.team === teamFilter : true;
-    const matchesPrice = player.now_cost >= priceRange[0] && player.now_cost <= priceRange[1];
+    const matchesPrice = (player.now_cost) >= priceRange[0] && (player.now_cost) <= priceRange[1]; // Adjusted for actual price in millions
     return matchesName && matchesPosition && matchesTeam && matchesPrice;
   });
 
@@ -113,40 +113,41 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
           </button>
         </div>
 
-        {/* Price Range Slider - Full Width */}
+        {/* Price Range Slider - Full Width with 0.1M increments */}
         <div className="flex flex-col sm:flex-row items-center gap-2 mb-4 px-4">
           <label className="text-gray-100 whitespace-nowrap">Price Range:</label>
           <input
             type="range"
             min="0"
-            max="200"
-            step="1"
+            max="16.0"
+            step="0.1"
             value={priceRange[1]}
-            onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+            onChange={(e) => setPriceRange([0, parseFloat(e.target.value)])}
             className="w-full focus:ring-2 focus:ring-blue-500"
           />
-          <span className="text-gray-100 whitespace-nowrap">${(priceRange[1]).toFixed(1)}M</span>
+          <span className="text-gray-100 whitespace-nowrap">${priceRange[1].toFixed(1)}M</span>
         </div>
 
-        {/* Scrollable Table Container */}
+            
+        {/* Rest of the component remains the same */}
         <div className="overflow-x-auto rounded-lg border border-gray-800">
-          <div className="min-w-[1000px]"> {/* Minimum width to prevent squishing */}
+          <div className="min-w-[1000px]">
             <table className="w-full table-auto">
               <thead className="bg-indigo-900">
                 <tr>
                   {[
                     { field: "name", label: "Name" },
                     { field: "team", label: "Team" },
-                    { field: "position", label: "Pos" }, // Shortened for mobile
-                    { field: "expected_goals", label: "xG" }, // Shortened for mobile
-                    { field: "predicted_points", label: "Pred. Pts" }, // Shortened for mobile
+                    { field: "position", label: "Pos" },
+                    { field: "expected_goals", label: "xG" },
+                    { field: "predicted_points", label: "Pred. Pts" },
                     { field: "goals_scored", label: "Goals" },
-                    { field: "total_points", label: "Pts" }, // Shortened for mobile
+                    { field: "total_points", label: "Pts" },
                     { field: "now_cost", label: "Price" },
                     { field: "form", label: "Form" },
-                    { field: "assists", label: "Ast" }, // Shortened for mobile
-                    { field: "clean_sheets", label: "CS" }, // Shortened for mobile
-                    { field: "saves_per_90", label: "Sv90" } // Shortened for mobile
+                    { field: "assists", label: "Ast" },
+                    { field: "clean_sheets", label: "CS" },
+                    { field: "saves_per_90", label: "Sv90" }
                   ].map(({ field, label }, index, array) => (
                     <th
                       key={label}
@@ -198,7 +199,7 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
                       player.predicted_points !== undefined && player.predicted_points !== null ? Math.round(player.predicted_points * 10) / 10 : "0.0",
                       player.goals_scored,
                       player.total_points,
-                      `$${(player.now_cost / 10 * 10).toFixed(1)}M`,
+                      `$${(player.now_cost / 10).toFixed(1)}M`, // Adjusted to show actual price in millions
                       player.form,
                       player.assists,
                       player.clean_sheets,
@@ -223,7 +224,7 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
           </div>
         </div>
 
-        {/* Pagination Controls - Mobile Friendly */}
+        {/* Pagination Controls */}
         <div className="flex flex-col sm:flex-row justify-center items-center mt-4 gap-2 sm:gap-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
