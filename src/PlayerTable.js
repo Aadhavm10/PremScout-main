@@ -11,6 +11,16 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
 
   const playersPerPage = 20;
 
+  const handleReset = () => {
+    setFilter("");
+    setPositionFilter("");
+    setTeamFilter("");
+    setPriceRange([0, 20.0]);
+    setSortField(null);
+    setDecending(true);
+    setCurrentPage(1);
+  };
+
   const filteredPlayers = (players || []).filter((player) => {
     const matchesName = player.name && player.name.toLowerCase().includes(filter.toLowerCase());
     const matchesPosition = positionFilter ? player.position === positionFilter : true;
@@ -102,14 +112,10 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
           </select>
 
           <button
-            onClick={() => {
-              setSortField(null);
-              setDecending(true);
-              setCurrentPage(1);
-            }}
+            onClick={handleReset}
             className="p-2 sm:p-3 bg-gray-700 text-gray-100 rounded-full shadow-sm hover:bg-gray-600 w-full"
           >
-            Reset Sort
+            Reset Filters
           </button>
         </div>
 
