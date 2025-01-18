@@ -63,21 +63,21 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
 
   return (
     <div className="min-h-screen bg-black">
-      <div className="mt-8 p-6">
+      <div className="p-2 sm:p-6">
         <h2 className="text-lg font-semibold mb-4 text-gray-100 text-center">Player Data</h2>
 
-        {/* Filter Section */}
-        <div className="flex flex-wrap gap-4 mb-4 justify-center">
+        {/* Filter Section - Responsive Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4">
           <input
             type="text"
             placeholder="Search players..."
-            className="p-3 border rounded-full bg-gray-700 text-gray-100 border-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder-gray-400 text-center w-48"
+            className="p-2 sm:p-3 border rounded-full bg-gray-700 text-gray-100 border-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder-gray-400 text-center w-full"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           />
 
           <select
-            className="p-3 border rounded-full bg-indigo-900 text-gray-100 border-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center appearance-none pr-8 w-40 hover:bg-indigo-800 transition-colors"
+            className="p-2 sm:p-3 border rounded-full bg-indigo-900 text-gray-100 border-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center appearance-none w-full hover:bg-indigo-800 transition-colors"
             value={positionFilter}
             onChange={(e) => setPositionFilter(e.target.value)}
           >
@@ -89,7 +89,7 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
           </select>
 
           <select
-            className="p-3 border rounded-full bg-indigo-900 text-gray-100 border-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center appearance-none pr-8 w-40 hover:bg-indigo-800 transition-colors"
+            className="p-2 sm:p-3 border rounded-full bg-indigo-900 text-gray-100 border-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-center appearance-none w-full hover:bg-indigo-800 transition-colors"
             value={teamFilter}
             onChange={(e) => setTeamFilter(e.target.value)}
           >
@@ -101,132 +101,134 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
             ))}
           </select>
 
-          <div className="flex items-center">
-            <label className="mr-2 text-gray-100">Price Range:</label>
-            <input
-              type="range"
-              min="0"
-              max="200"
-              step="1"
-              value={priceRange[1]}
-              onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-              className="focus:ring-2 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-100">${(priceRange[1]).toFixed(1)}M</span>
-          </div>
-
           <button
             onClick={() => {
               setSortField(null);
               setDecending(true);
               setCurrentPage(1);
             }}
-            className="p-3 bg-gray-700 text-gray-100 rounded-full shadow-sm hover:bg-gray-600 px-6"
+            className="p-2 sm:p-3 bg-gray-700 text-gray-100 rounded-full shadow-sm hover:bg-gray-600 w-full"
           >
             Reset Sort
           </button>
         </div>
 
-        {/* Rest of the component remains the same */}
-        {/* Player Table */}
-        <div className="overflow-hidden rounded-lg border border-gray-800">
-          <table className="min-w-full table-auto">
-            <thead className="bg-indigo-900">
-              <tr>
-                {[
-                  { field: "name", label: "Name" },
-                  { field: "team", label: "Team" },
-                  { field: "position", label: "Position" },
-                  { field: "expected_goals", label: "PREMSCOUT Expected\nGoals" },
-                  { field: "predicted_points", label: "PREMSCOUT Projected Points" },
-                  { field: "goals_scored", label: "Goals" },
-                  { field: "total_points", label: "Total Points" },
-                  { field: "now_cost", label: "Price" },
-                  { field: "form", label: "Form" },
-                  { field: "assists", label: "Assists" },
-                  { field: "clean_sheets", label: "Clean Sheets" },
-                  { field: "saves_per_90", label: "Saves Per 90" }
-                ].map(({ field, label }, index, array) => (
-                  <th
-                    key={label}
-                    className={`p-3 border-b border-gray-800 cursor-pointer text-center ${
-                      isPremscoutColumn(field) ? 'text-green-400' : 'text-gray-100'
-                    } ${
-                      sortField === field ? "bg-indigo-800" : ""
-                    } ${
-                      index === 0 ? 'rounded-tl-lg' : ''
-                    } ${
-                      index === array.length - 1 ? 'rounded-tr-lg' : ''
-                    }`}
-                    onClick={() => field && toggleSort(field)}
-                  >
-                    <span className="flex items-center justify-center">
-                      {label}
-                      {field && sortField === field && (
-                        <span className="ml-2 text-sm">
-                          {decending ? "🔽" : "🔼"}
-                        </span>
-                      )}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedPlayers.map((player, index) => (
-                <tr
-                  key={index}
-                  className={`${
-                    index % 2 === 0 ? "bg-black" : "bg-gray-900"
-                  } ${
-                    index === paginatedPlayers.length - 1 ? "last-row" : ""
-                  }`}
-                >
-                  <td
-                    className={`p-3 text-blue-400 cursor-pointer hover:text-blue-300 underline text-center border-b border-gray-800 ${
-                      index === paginatedPlayers.length - 1 ? "rounded-bl-lg" : ""
-                    }`}
-                    onClick={() => onPlayerClick(player)}
-                  >
-                    {player.name}
-                  </td>
-                  {[
-                    player.team,
-                    player.position,
-                    player.expected_goals !== undefined ? parseFloat(player.expected_goals).toFixed(1) : "0.0",
-                    player.predicted_points !== undefined && player.predicted_points !== null ? Math.round(player.predicted_points * 10) / 10 : "0.0",
-                    player.goals_scored,
-                    player.total_points,
-                    `$${(player.now_cost / 10 * 10).toFixed(1)}M`,
-                    player.form,
-                    player.assists,
-                    player.clean_sheets,
-                    player.saves_per_90
-                  ].map((value, cellIndex, array) => (
-                    <td
-                      key={cellIndex}
-                      className={`p-3 ${
-                        cellIndex < 2 ? 'text-gray-100' : 
-                        cellIndex < 4 ? 'text-green-400' : 'text-gray-100'
-                      } text-center border-b border-gray-800 ${
-                        index === paginatedPlayers.length - 1 && cellIndex === array.length - 1 ? "rounded-br-lg" : ""
-                      }`}
-                    >
-                      {value}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Price Range Slider - Full Width */}
+        <div className="flex flex-col sm:flex-row items-center gap-2 mb-4 px-4">
+          <label className="text-gray-100 whitespace-nowrap">Price Range:</label>
+          <input
+            type="range"
+            min="0"
+            max="200"
+            step="1"
+            value={priceRange[1]}
+            onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+            className="w-full focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-gray-100 whitespace-nowrap">${(priceRange[1]).toFixed(1)}M</span>
         </div>
 
-        {/* Pagination Controls */}
-        <div className="flex justify-center items-center mt-4 gap-4">
+        {/* Scrollable Table Container */}
+        <div className="overflow-x-auto rounded-lg border border-gray-800">
+          <div className="min-w-[1000px]"> {/* Minimum width to prevent squishing */}
+            <table className="w-full table-auto">
+              <thead className="bg-indigo-900">
+                <tr>
+                  {[
+                    { field: "name", label: "Name" },
+                    { field: "team", label: "Team" },
+                    { field: "position", label: "Pos" }, // Shortened for mobile
+                    { field: "expected_goals", label: "xG" }, // Shortened for mobile
+                    { field: "predicted_points", label: "Pred. Pts" }, // Shortened for mobile
+                    { field: "goals_scored", label: "Goals" },
+                    { field: "total_points", label: "Pts" }, // Shortened for mobile
+                    { field: "now_cost", label: "Price" },
+                    { field: "form", label: "Form" },
+                    { field: "assists", label: "Ast" }, // Shortened for mobile
+                    { field: "clean_sheets", label: "CS" }, // Shortened for mobile
+                    { field: "saves_per_90", label: "Sv90" } // Shortened for mobile
+                  ].map(({ field, label }, index, array) => (
+                    <th
+                      key={label}
+                      className={`p-2 sm:p-3 border-b border-gray-800 cursor-pointer text-center ${
+                        isPremscoutColumn(field) ? 'text-green-400' : 'text-gray-100'
+                      } ${
+                        sortField === field ? "bg-indigo-800" : ""
+                      } ${
+                        index === 0 ? 'rounded-tl-lg' : ''
+                      } ${
+                        index === array.length - 1 ? 'rounded-tr-lg' : ''
+                      }`}
+                      onClick={() => field && toggleSort(field)}
+                    >
+                      <span className="flex items-center justify-center text-xs sm:text-sm">
+                        {label}
+                        {field && sortField === field && (
+                          <span className="ml-1 sm:ml-2 text-xs">
+                            {decending ? "🔽" : "🔼"}
+                          </span>
+                        )}
+                      </span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedPlayers.map((player, index) => (
+                  <tr
+                    key={index}
+                    className={`${
+                      index % 2 === 0 ? "bg-black" : "bg-gray-900"
+                    } ${
+                      index === paginatedPlayers.length - 1 ? "last-row" : ""
+                    }`}
+                  >
+                    <td
+                      className={`p-2 sm:p-3 text-blue-400 cursor-pointer hover:text-blue-300 underline text-center border-b border-gray-800 ${
+                        index === paginatedPlayers.length - 1 ? "rounded-bl-lg" : ""
+                      }`}
+                      onClick={() => onPlayerClick(player)}
+                    >
+                      <span className="text-xs sm:text-sm">{player.name}</span>
+                    </td>
+                    {[
+                      player.team,
+                      player.position,
+                      player.expected_goals !== undefined ? parseFloat(player.expected_goals).toFixed(1) : "0.0",
+                      player.predicted_points !== undefined && player.predicted_points !== null ? Math.round(player.predicted_points * 10) / 10 : "0.0",
+                      player.goals_scored,
+                      player.total_points,
+                      `$${(player.now_cost / 10 * 10).toFixed(1)}M`,
+                      player.form,
+                      player.assists,
+                      player.clean_sheets,
+                      player.saves_per_90
+                    ].map((value, cellIndex, array) => (
+                      <td
+                        key={cellIndex}
+                        className={`p-2 sm:p-3 ${
+                          cellIndex < 2 ? 'text-gray-100' : 
+                          cellIndex < 4 ? 'text-green-400' : 'text-gray-100'
+                        } text-center border-b border-gray-800 ${
+                          index === paginatedPlayers.length - 1 && cellIndex === array.length - 1 ? "rounded-br-lg" : ""
+                        }`}
+                      >
+                        <span className="text-xs sm:text-sm">{value}</span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Pagination Controls - Mobile Friendly */}
+        <div className="flex flex-col sm:flex-row justify-center items-center mt-4 gap-2 sm:gap-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className={`p-2 rounded ${
+            className={`p-2 rounded w-full sm:w-auto ${
               currentPage === 1
                 ? "bg-gray-800 text-gray-500 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700 text-gray-100"
@@ -234,13 +236,13 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
           >
             Previous
           </button>
-          <p className="text-gray-100">
+          <p className="text-gray-100 text-sm sm:text-base">
             Page {currentPage} of {totalPages}
           </p>
           <button
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className={`p-2 rounded ${
+            className={`p-2 rounded w-full sm:w-auto ${
               currentPage === totalPages
                 ? "bg-gray-800 text-gray-500 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700 text-gray-100"

@@ -36,7 +36,7 @@ const PlayerCard = ({ player, onClose }) => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {[
               { label: "Total Points", value: player.total_points },
-              { label: "Price", value: `$${(player.now_cost / 10).toFixed(1)}M` },
+              { label: "Price", value: `$${(player.now_cost / 10 * 10).toFixed(1)}M` },
               { label: "Goals", value: player.goals_scored },
               { label: "Assists", value: player.assists },
               { label: "Minutes", value: player.minutes },

@@ -35,24 +35,31 @@ const App = () => {
         Papa.parse(csvText, {
           header: true,
           complete: (result) => {
-            console.log("Raw headshots data:", result.data); // Debugging log
+            // Log the first few rows to verify structure
+            console.log("Sample headshots data:", result.data.slice(0, 3));
+            
             const mappedHeadshots = result.data.reduce((acc, row) => {
+              // Make sure we're using the exact column names from your CSV
               const name = row.name ? row.name.trim().toLowerCase() : null;
-              const url = row.url ? row.url.trim() : null;
+              const url = row.image_url ? row.image_url.trim() : null;
+              
               if (name && url) {
                 acc[name] = url;
               }
               return acc;
             }, {});
-            console.log("Mapped headshots:", mappedHeadshots); // Debugging log
+            
             setHeadshots(mappedHeadshots);
-          },
+            
+            // Log the first few mapped headshots
+            console.log("First few mapped headshots:", 
+              Object.entries(mappedHeadshots).slice(0, 3));
+          }
         });
       } catch (error) {
-        console.error("Error fetching or parsing headshots dataset:", error);
+        console.error("Error fetching headshots dataset:", error);
       }
     };
-
     fetchData();
     fetchHeadshots();
   }, []);
