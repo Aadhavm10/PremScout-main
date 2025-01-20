@@ -145,15 +145,15 @@ const PlayerTable = ({ players = [], onPlayerClick = () => {} }) => {
                     { field: "name", label: "Name" },
                     { field: "team", label: "Team" },
                     { field: "position", label: "Pos" },
-                    { field: "expected_goals", label: "xG" },
-                    { field: "predicted_points", label: "Pred. Pts" },
+                    { field: "expected_goals", label: "Expected Goals" },
+                    { field: "predicted_points", label: "Predicted Points" },
                     { field: "goals_scored", label: "Goals" },
                     { field: "total_points", label: "Pts" },
                     { field: "now_cost", label: "Price" },
                     { field: "form", label: "Form" },
-                    { field: "assists", label: "Ast" },
-                    { field: "clean_sheets", label: "CS" },
-                    { field: "saves_per_90", label: "Sv90" }
+                    { field: "assists", label: "Assists" },
+                    { field: "clean_sheets", label: "Clean Sheets" },
+                    { field: "saves_per_90", label: "Saves per 90" }
                   ].map(({ field, label }, index, array) => (
                     <th
                       key={label}
