@@ -35,7 +35,7 @@ const TeamOfTheWeek = ({ players = [], onPlayerClick }) => {
             Team of the Week
           </h2>
           <h4 className="text-green-500 text-center text-lg md:text-xl lg:text-2xl font-bold mb-1">
-            Gameweek 23 PREMSCOUT Projected Points
+            Current Gameweek PREMSCOUT Projected Points
           </h4>
           <p className="text-white text-center text-base md:text-lg lg:text-xl">
             Formation: 3-4-3
